@@ -25,6 +25,8 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     # No ports exposed — only accessible within Docker network
+    networks:
+      - default
     mem_limit: 256m
     cpus: 0.5
 
@@ -47,13 +49,16 @@ services:
       BETTER_AUTH_SECRET: "${CLAWCOMCLIP_AUTH_SECRET:-}"
       PAPERCLIP_MIGRATION_AUTO_APPLY: "true"
       # OpenClaw gateway connection (for REST adapter)
-      OPENCLAW_GATEWAY_URL: "${OPENCLAW_GATEWAY_URL:-http://host.docker.internal:18789}"
+      OPENCLAW_GATEWAY_URL: "${OPENCLAW_GATEWAY_URL:-http://openclaw:18789}"
       OPENCLAW_GATEWAY_TOKEN: "${OPENCLAW_GATEWAY_TOKEN:-}"
     volumes:
       - clawcomclip-data:/clawcomclip
     depends_on:
       db:
         condition: service_healthy
+    networks:
+      - default
+      - openclaw-net
     mem_limit: 512m
     cpus: 1.0
     security_opt:
@@ -64,3 +69,9 @@ volumes:
     name: clawcomclip-pgdata
   clawcomclip-data:
     name: clawcomclip-data
+
+networks:
+  default:
+  openclaw-net:
+    external: true
+    name: openclaw-docker_openclaw-net
