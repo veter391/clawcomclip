@@ -188,6 +188,19 @@ importers:
         specifier: ^5.7.3
         version: 5.9.3
 
+  packages/adapters/openclaw-rest:
+    dependencies:
+      '@paperclipai/adapter-utils':
+        specifier: workspace:*
+        version: link:../../adapter-utils
+    devDependencies:
+      '@types/node':
+        specifier: ^24.6.0
+        version: 24.12.0
+      typescript:
+        specifier: ^5.7.3
+        version: 5.9.3
+
   packages/adapters/opencode-local:
     dependencies:
       '@paperclipai/adapter-utils':
@@ -440,6 +453,9 @@ importers:
       '@aws-sdk/client-s3':
         specifier: ^3.888.0
         version: 3.994.0
+      '@clawcomclip/adapter-openclaw-rest':
+        specifier: workspace:*
+        version: link:../packages/adapters/openclaw-rest
       '@paperclipai/adapter-claude-local':
         specifier: workspace:*
         version: link:../packages/adapters/claude-local
@@ -579,6 +595,9 @@ importers:
 
   ui:
     dependencies:
+      '@clawcomclip/adapter-openclaw-rest':
+        specifier: workspace:*
+        version: link:../packages/adapters/openclaw-rest
       '@dnd-kit/core':
         specifier: ^6.3.1
         version: 6.3.1(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
