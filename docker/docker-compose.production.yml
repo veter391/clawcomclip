@@ -1,0 +1,66 @@
+# ClawComClip — Production deployment
+# Designed to run alongside OpenClaw on the same VPS
+#
+# Usage:
+#   cd /home/openclaw/clawcomclip/docker
+#   docker compose -f docker-compose.production.yml up -d
+#
+# Access (SSH tunnel only):
+#   ssh -L 3100:localhost:3100 root@<server-ip>
+#   Open http://localhost:3100
+
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: clawcomclip
+      POSTGRES_PASSWORD: "${CLAWCOMCLIP_DB_PASSWORD:?Set CLAWCOMCLIP_DB_PASSWORD in .env}"
+      POSTGRES_DB: clawcomclip
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U clawcomclip -d clawcomclip"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    # No ports exposed — only accessible within Docker network
+    mem_limit: 256m
+    cpus: 0.5
+
+  server:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3100:3100"  # Loopback only — no external access
+    environment:
+      DATABASE_URL: "postgres://clawcomclip:${CLAWCOMCLIP_DB_PASSWORD}@db:5432/clawcomclip"
+      HOST: "0.0.0.0"
+      PORT: "3100"
+      SERVE_UI: "true"
+      PAPERCLIP_HOME: "/clawcomclip"
+      PAPERCLIP_INSTANCE_ID: "default"
+      PAPERCLIP_DEPLOYMENT_MODE: "${CLAWCOMCLIP_AUTH_MODE:-local_trusted}"
+      PAPERCLIP_DEPLOYMENT_EXPOSURE: "private"
+      BETTER_AUTH_SECRET: "${CLAWCOMCLIP_AUTH_SECRET:-}"
+      PAPERCLIP_MIGRATION_AUTO_APPLY: "true"
+      # OpenClaw gateway connection (for REST adapter)
+      OPENCLAW_GATEWAY_URL: "${OPENCLAW_GATEWAY_URL:-http://host.docker.internal:18789}"
+      OPENCLAW_GATEWAY_TOKEN: "${OPENCLAW_GATEWAY_TOKEN:-}"
+    volumes:
+      - clawcomclip-data:/clawcomclip
+    depends_on:
+      db:
+        condition: service_healthy
+    mem_limit: 512m
+    cpus: 1.0
+    security_opt:
+      - no-new-privileges:true
+
+volumes:
+  pgdata:
+    name: clawcomclip-pgdata
+  clawcomclip-data:
+    name: clawcomclip-data
