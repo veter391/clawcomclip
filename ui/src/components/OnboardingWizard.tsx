@@ -68,7 +68,8 @@ type AdapterType =
   | "pi_local"
   | "cursor"
   | "http"
-  | "openclaw_gateway";
+  | "openclaw_gateway"
+  | "openclaw_rest";
 
 const DEFAULT_TASK_DESCRIPTION = `You are the CEO. You set the direction for the company.
 
@@ -861,6 +862,12 @@ export function OnboardingWizard() {
                             desc: "Invoke OpenClaw via gateway protocol",
                             comingSoon: true,
                             disabledLabel: "Configure OpenClaw within the App"
+                          },
+                          {
+                            value: "openclaw_rest" as const,
+                            label: "OpenClaw REST",
+                            icon: Bot,
+                            desc: "Invoke OpenClaw via HTTP REST API"
                           }
                         ].map((opt) => (
                           <button
@@ -1137,11 +1144,14 @@ export function OnboardingWizard() {
                   )}
 
                   {(adapterType === "http" ||
-                    adapterType === "openclaw_gateway") && (
+                    adapterType === "openclaw_gateway" ||
+                    adapterType === "openclaw_rest") && (
                     <div>
                       <label className="text-xs text-muted-foreground mb-1 block">
                         {adapterType === "openclaw_gateway"
                           ? "Gateway URL"
+                          : adapterType === "openclaw_rest"
+                          ? "Gateway HTTP URL"
                           : "Webhook URL"}
                       </label>
                       <input
@@ -1149,6 +1159,8 @@ export function OnboardingWizard() {
                         placeholder={
                           adapterType === "openclaw_gateway"
                             ? "ws://127.0.0.1:18789"
+                            : adapterType === "openclaw_rest"
+                            ? "http://127.0.0.1:18789"
                             : "https://..."
                         }
                         value={url}

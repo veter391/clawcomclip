@@ -54,6 +54,14 @@ import {
   agentConfigurationDoc as openclawGatewayAgentConfigurationDoc,
   models as openclawGatewayModels,
 } from "@paperclipai/adapter-openclaw-gateway";
+import {
+  execute as openclawRestExecute,
+  testEnvironment as openclawRestTestEnvironment,
+} from "@clawcomclip/adapter-openclaw-rest/server";
+import {
+  agentConfigurationDoc as openclawRestAgentConfigurationDoc,
+  models as openclawRestModels,
+} from "@clawcomclip/adapter-openclaw-rest";
 import { listCodexModels } from "./codex-models.js";
 import { listCursorModels } from "./cursor-models.js";
 import {
@@ -147,6 +155,15 @@ const openclawGatewayAdapter: ServerAdapterModule = {
   agentConfigurationDoc: openclawGatewayAgentConfigurationDoc,
 };
 
+const openclawRestAdapter: ServerAdapterModule = {
+  type: "openclaw_rest",
+  execute: openclawRestExecute,
+  testEnvironment: openclawRestTestEnvironment,
+  models: openclawRestModels,
+  supportsLocalAgentJwt: false,
+  agentConfigurationDoc: openclawRestAgentConfigurationDoc,
+};
+
 const openCodeLocalAdapter: ServerAdapterModule = {
   type: "opencode_local",
   execute: openCodeExecute,
@@ -197,6 +214,7 @@ const adaptersByType = new Map<string, ServerAdapterModule>(
     cursorLocalAdapter,
     geminiLocalAdapter,
     openclawGatewayAdapter,
+    openclawRestAdapter,
     hermesLocalAdapter,
     processAdapter,
     httpAdapter,

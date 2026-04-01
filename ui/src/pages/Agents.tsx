@@ -28,6 +28,7 @@ const adapterLabels: Record<string, string> = {
   cursor: "Cursor",
   hermes_local: "Hermes",
   openclaw_gateway: "OpenClaw Gateway",
+  openclaw_rest: "OpenClaw REST",
   process: "Process",
   http: "HTTP",
 };

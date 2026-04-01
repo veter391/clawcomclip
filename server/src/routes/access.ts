@@ -428,7 +428,7 @@ export function buildJoinDefaultsPayloadForAccept(input: {
   inboundOpenClawAuthHeader?: string | null;
   inboundOpenClawTokenHeader?: string | null;
 }): unknown {
-  if (input.adapterType !== "openclaw_gateway") {
+  if (input.adapterType !== "openclaw_gateway" && input.adapterType !== "openclaw_rest") {
     return input.defaultsPayload;
   }
 
@@ -533,7 +533,7 @@ export function canReplayOpenClawGatewayInviteAccept(input: {
 }): boolean {
   if (
     input.requestType !== "agent" ||
-    input.adapterType !== "openclaw_gateway"
+    (input.adapterType !== "openclaw_gateway" && input.adapterType !== "openclaw_rest")
   ) {
     return false;
   }
@@ -542,7 +542,7 @@ export function canReplayOpenClawGatewayInviteAccept(input: {
   }
   if (
     input.existingJoinRequest.requestType !== "agent" ||
-    input.existingJoinRequest.adapterType !== "openclaw_gateway"
+    (input.existingJoinRequest.adapterType !== "openclaw_gateway" && input.existingJoinRequest.adapterType !== "openclaw_rest")
   ) {
     return false;
   }
