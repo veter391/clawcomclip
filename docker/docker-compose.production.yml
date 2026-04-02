@@ -48,6 +48,7 @@ services:
       PAPERCLIP_DEPLOYMENT_EXPOSURE: "private"
       BETTER_AUTH_SECRET: "${CLAWCOMCLIP_AUTH_SECRET:-}"
       PAPERCLIP_MIGRATION_AUTO_APPLY: "true"
+      PAPERCLIP_ALLOWED_HOSTNAMES: "localhost,docker-server-1,openclaw"
       # OpenClaw gateway connection (for REST adapter)
       OPENCLAW_GATEWAY_URL: "${OPENCLAW_GATEWAY_URL:-http://openclaw:18789}"
       OPENCLAW_GATEWAY_TOKEN: "${OPENCLAW_GATEWAY_TOKEN:-}"
