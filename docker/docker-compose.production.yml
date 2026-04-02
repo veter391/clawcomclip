@@ -46,9 +46,11 @@ services:
       PAPERCLIP_INSTANCE_ID: "default"
       PAPERCLIP_DEPLOYMENT_MODE: "${CLAWCOMCLIP_AUTH_MODE:-local_trusted}"
       PAPERCLIP_DEPLOYMENT_EXPOSURE: "private"
+      PAPERCLIP_PUBLIC_URL: "${CLAWCOMCLIP_PUBLIC_URL:-http://localhost:3100}"
       BETTER_AUTH_SECRET: "${CLAWCOMCLIP_AUTH_SECRET:-}"
+      BETTER_AUTH_TRUSTED_ORIGINS: "${CLAWCOMCLIP_PUBLIC_URL:-http://localhost:3100}"
       PAPERCLIP_MIGRATION_AUTO_APPLY: "true"
-      PAPERCLIP_ALLOWED_HOSTNAMES: "localhost,docker-server-1,openclaw"
+      PAPERCLIP_ALLOWED_HOSTNAMES: "localhost,docker-server-1,openclaw,dashboard.startupminded.com"
       # OpenClaw gateway connection (for REST adapter)
       OPENCLAW_GATEWAY_URL: "${OPENCLAW_GATEWAY_URL:-http://openclaw:18789}"
       OPENCLAW_GATEWAY_TOKEN: "${OPENCLAW_GATEWAY_TOKEN:-}"
